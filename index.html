@@ -15,7 +15,6 @@
       --stroke:rgba(255,45,111,.16);
       --shadow:0 18px 50px rgba(0,0,0,.10);
     }
-
     *{box-sizing:border-box}
 
     body{
@@ -222,7 +221,7 @@
       font-weight: 1000;
     }
 
-    /* Faba appreciation section (cute) */
+    /* Faba appreciation */
     .appreciation{
       width:min(700px, 100%);
       margin: 18px auto 0;
@@ -279,6 +278,77 @@
       transition: background 1.1s ease;
     }
     .cinema.on{ background: rgba(0,0,0,0.40); }
+
+    /* AFTER YES MODAL */
+    .afterYes{
+      position: fixed;
+      inset: 0;
+      display:none;
+      place-items:center;
+      padding:24px;
+      z-index: 500;
+      background: rgba(0,0,0,.25);
+      backdrop-filter: blur(3px);
+    }
+    .afterCard{
+      width:min(720px, 92vw);
+      background: rgba(255,255,255,.96);
+      border: 1px solid rgba(255,45,111,.18);
+      border-radius: 28px;
+      padding: 18px;
+      box-shadow: 0 22px 60px rgba(0,0,0,.22);
+      position:relative;
+      text-align:center;
+      overflow:hidden;
+    }
+    .afterCard::before{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(circle at 15% 10%, rgba(255,45,111,.12), transparent 55%),
+                  radial-gradient(circle at 85% 20%, rgba(255,106,162,.12), transparent 55%);
+      pointer-events:none;
+    }
+    .afterTitle{
+      margin: 6px 0 6px;
+      font-size: 1.6rem;
+      font-weight: 1000;
+      position:relative;
+    }
+    .afterText{
+      margin: 0 auto 12px;
+      max-width: 560px;
+      opacity:.9;
+      line-height:1.45;
+      position:relative;
+    }
+    .afterBtns{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+      position:relative;
+    }
+    .miniBtn{
+      border:0;
+      padding: 12px 16px;
+      border-radius: 999px;
+      cursor:pointer;
+      font-weight: 900;
+    }
+    .miniBtn.primary{
+      background: var(--pink);
+      color:white;
+      box-shadow: 0 14px 26px rgba(255,45,111,.22);
+    }
+    .miniBtn.ghost{
+      background: rgba(0,0,0,.06);
+    }
+    .hint{
+      margin-top:10px;
+      font-size:.9rem;
+      opacity:.75;
+      position:relative;
+    }
   </style>
 </head>
 
@@ -304,7 +374,6 @@
     <div class="notes" id="notes"></div>
 
     <div class="photos">
-      <!-- MUST match repo filenames exactly -->
       <img src="sillies.jpg" alt="sillies">
       <img src="theloml.jpg" alt="theloml">
     </div>
@@ -346,6 +415,24 @@
     <audio id="song" preload="auto">
       <source src="radio.mp3" type="audio/mpeg">
     </audio>
+  </div>
+
+  <!-- AFTER YES CUTE SCENE -->
+  <div class="afterYes" id="afterYes">
+    <div class="afterCard">
+      <div class="afterTitle">YIPPEEE HOORAYYYY YAYYYYYY 🎉💞</div>
+      <div class="afterText">
+        Okay… now you’re officially stuck with <strong>Four Eyes</strong>.<br>
+        Text me <strong>“YES”</strong> so I know it’s real 😭💗
+      </div>
+
+      <div class="afterBtns">
+        <button class="miniBtn primary" id="musicBtn" type="button">Tap to start music 🎧</button>
+        <button class="miniBtn ghost" id="closeBtn" type="button">Close</button>
+      </div>
+
+      <div class="hint">If music is already playing, this button will just make sure it’s unmuted.</div>
+    </div>
   </div>
 
   <script>
@@ -474,7 +561,7 @@
       }, intervalMs);
     }
 
-    // little heart burst on YES (pazazz)
+    // heart burst
     function heartBurst(){
       for(let i=0;i<60;i++){
         const p=document.createElement("div");
@@ -503,6 +590,27 @@
       }
     }
 
+    // AFTER YES modal controls
+    const afterYes = document.getElementById("afterYes");
+    const musicBtn = document.getElementById("musicBtn");
+    const closeBtn = document.getElementById("closeBtn");
+
+    async function forcePlayMusic(){
+      // make sure it isn't muted and volume isn't stuck at 0
+      song.muted = false;
+      song.volume = 1;
+
+      try{
+        await song.play();
+        fadeInAudio(song, 2.2);
+        musicBtn.textContent = "Music playing 🎶";
+      }catch(e){
+        // If this still fails, the browser has site sound blocked
+        musicBtn.textContent = "Sound blocked — unmute site 🔊";
+        showToast("If sound is blocked: click the 🔒 in the address bar and allow sound.");
+      }
+    }
+
     yes.addEventListener("click", async () => {
       cinema.classList.add("on");
       result.innerHTML = "YIPPEEE HOORAYYYY YAYYYYYY 🎉💞";
@@ -511,13 +619,15 @@
       showToast("W. Massive W. 😭💖");
       heartBurst();
 
-      try{
-        await song.play();
-        fadeInAudio(song, 2.2);
-      }catch(e){
-        showToast("Tap YES again so the song can play 😭");
-      }
+      // show cute after scene
+      afterYes.style.display = "grid";
+
+      // attempt to play immediately (works on most browsers)
+      await forcePlayMusic();
     });
+
+    musicBtn.addEventListener("click", forcePlayMusic);
+    closeBtn.addEventListener("click", ()=> afterYes.style.display = "none");
   </script>
 </body>
 </html>
