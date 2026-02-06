@@ -6,184 +6,547 @@
 <title>Faba Fish 💗</title>
 
 <style>
-body{
-margin:0;
-font-family:Arial, sans-serif;
-background: radial-gradient(circle at top, #ffe3ef, #ffffff);
-display:grid;
-place-items:center;
-overflow:hidden;
-}
+  :root{
+    --pink:#ff2d6f;
+    --soft:#fff0f6;
+    --ink:#1f1f1f;
+  }
 
-.card{
-width:80%;
-max-width:700px;
-background:white;
-padding:30px;
-border-radius:25px;
-box-shadow:0 10px 30px rgba(0,0,0,0.1);
-text-align:center;
-position:relative;
-}
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background: radial-gradient(circle at top, #ffe3ef, #ffffff);
+    display:grid;
+    place-items:center;
+    overflow-x:hidden;
+    color:var(--ink);
+  }
 
-.photos img{
-width:200px;
-height:200px;
-object-fit:cover;
-border-radius:20px;
-margin:10px;
-}
+  /* Intro overlay */
+  .overlay{
+    position:fixed;
+    inset:0;
+    background: rgba(0,0,0,0.82);
+    display:grid;
+    place-items:center;
+    color:white;
+    z-index:999;
+    padding:24px;
+    text-align:center;
+  }
+  .overlayCard{
+    width:min(720px, 92vw);
+    border:1px solid rgba(255,255,255,0.18);
+    border-radius:24px;
+    padding:22px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  }
+  .progress{
+    height:10px;
+    border-radius:999px;
+    background: rgba(255,255,255,0.12);
+    overflow:hidden;
+    margin:16px 0 18px;
+  }
+  .bar{
+    height:100%;
+    width:0%;
+    border-radius:999px;
+    background: linear-gradient(90deg, rgba(255,45,111,1), rgba(255,210,226,1));
+    transition: width .2s ease;
+  }
+  .startBtn{
+    border:0;
+    background: var(--pink);
+    color:white;
+    padding: 12px 18px;
+    border-radius: 999px;
+    font-size: 1rem;
+    cursor:pointer;
+    box-shadow: 0 14px 28px rgba(255,45,111,.25);
+  }
 
-button{
-padding:15px 25px;
-font-size:18px;
-border:none;
-border-radius:999px;
-cursor:pointer;
-}
+  /* Main card */
+  .card{
+    width:min(760px, 92vw);
+    background: rgba(255,255,255,0.94);
+    border: 1px solid rgba(255,45,111,0.16);
+    border-radius: 26px;
+    padding: 26px;
+    box-shadow:0 18px 50px rgba(0,0,0,0.10);
+    text-align:center;
+    position:relative;
+    margin: 36px 0;
+  }
 
-#yes{
-background:#ff2d6f;
-color:white;
-transition:0.2s;
-}
+  h1{ margin: 4px 0 8px; font-size: 2rem; }
+  .lead{ margin: 0 0 10px; font-size: 1.05rem; line-height:1.55; opacity:.92; }
 
-#no{
-background:#eee;
-position:relative;
-}
+  /* Typed section */
+  .typedBox{
+    margin: 14px auto 16px;
+    width: min(680px, 100%);
+    background: rgba(255,240,246,0.9);
+    border: 1px solid rgba(255,45,111,0.16);
+    border-radius: 20px;
+    padding: 14px 16px;
+    text-align:left;
+    box-shadow: 0 10px 25px rgba(0,0,0,.06);
+  }
+  #typed{
+    white-space: pre-wrap;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin:0;
+  }
 
-.playlist{
-margin-top:20px;
-text-align:left;
-}
+  /* Photos */
+  .photos{
+    display:flex;
+    gap: 12px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin: 14px 0 10px;
+  }
+  .photos img{
+    width: 210px;
+    height: 210px;
+    object-fit: cover;
+    border-radius: 22px;
+    border: 1px solid rgba(255,45,111,0.18);
+    box-shadow: 0 14px 26px rgba(0,0,0,.08);
+    user-select:none;
+  }
 
-.overlay{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.8);
-display:grid;
-place-items:center;
-color:white;
-z-index:999;
-text-align:center;
-}
+  /* Buttons */
+  .btnArea{
+    margin-top: 12px;
+    position:relative;
+    min-height: 70px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 12px;
+    flex-wrap:wrap;
+  }
+  button{
+    border:0;
+    padding: 14px 20px;
+    font-size: 1.08rem;
+    border-radius: 999px;
+    cursor:pointer;
+    user-select:none;
+    transition: transform .12s ease, filter .15s ease;
+  }
+  button:active{ transform: scale(.99); }
 
-.cursor{
-animation:blink 1s infinite;
-}
-@keyframes blink{50%{opacity:0}}
+  #yes{
+    background: var(--pink);
+    color: white;
+    box-shadow: 0 18px 30px rgba(255,45,111,.25);
+  }
+  #yes:hover{ filter: brightness(1.03); }
 
+  #no{
+    background: #f2f2f2;
+    color:#111;
+    border: 1px solid rgba(0,0,0,.06);
+  }
+
+  .toast{
+    min-height: 26px;
+    margin-top: 10px;
+    font-weight: 800;
+    color: var(--pink);
+  }
+
+  .result{
+    margin-top: 14px;
+    font-size: 1.25rem;
+    font-weight: 900;
+  }
+
+  /* ===== Mixtape card (new playlist) ===== */
+  .mixtape{
+    margin-top: 22px;
+    text-align:left;
+    background: rgba(255,255,255,0.92);
+    border: 1px solid rgba(255,45,111,0.18);
+    border-radius: 22px;
+    padding: 16px;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.07);
+  }
+
+  .mixtapeTop{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom: 12px;
+  }
+
+  .tag{
+    display:inline-block;
+    font-size:.78rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:#ff2d6f;
+    opacity:.9;
+    margin-bottom:6px;
+  }
+
+  .mixtapeTitle{
+    margin:0;
+    font-size:1.15rem;
+  }
+
+  .mixtapeSub{
+    margin-top:4px;
+    font-size:.95rem;
+    opacity:.8;
+  }
+
+  .playBtn{
+    width:44px;
+    height:44px;
+    border-radius:999px;
+    border:0;
+    background:#ff2d6f;
+    color:white;
+    font-size:1.05rem;
+    cursor:pointer;
+    box-shadow: 0 12px 22px rgba(255,45,111,0.25);
+  }
+
+  .tracks{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .track{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background: rgba(255,240,246,0.75);
+    border: 1px solid rgba(255,45,111,0.12);
+    border-radius: 18px;
+    padding: 12px 12px;
+  }
+
+  .tLeft{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+  }
+
+  .num{
+    width:40px;
+    height:40px;
+    border-radius:14px;
+    display:grid;
+    place-items:center;
+    background: rgba(255,45,111,0.14);
+    color:#ff2d6f;
+    font-weight:900;
+  }
+
+  .song{
+    font-weight:900;
+    margin-bottom:2px;
+  }
+
+  .artist{
+    font-weight:800;
+    opacity:.8;
+  }
+
+  .why{
+    font-size:.95rem;
+    opacity:.85;
+    line-height:1.35;
+  }
+
+  .mood{
+    font-size:1.2rem;
+    padding-left:10px;
+  }
+
+  .mixtapeFooter{
+    margin-top:12px;
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    font-size:.9rem;
+    opacity:.78;
+  }
+
+  .tiny{
+    margin-top: 14px;
+    font-size: .9rem;
+    opacity:.72;
+  }
 </style>
 </head>
 
 <body>
 
+<!-- Intro overlay -->
 <div class="overlay" id="overlay">
-<div>
-<h2>Loading something special for Faba Fish 💗</h2>
-<button onclick="startSite()">Start</button>
-</div>
+  <div class="overlayCard">
+    <h2 style="margin:0 0 6px;">Loading something special for Faba Fish 💗</h2>
+    <div style="opacity:.85; line-height:1.5;">
+      Not a scam. Not a virus. Just me being extra.<br>
+      Press start when you’re ready 😭
+    </div>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <button class="startBtn" id="startBtn" type="button">Start</button>
+  </div>
 </div>
 
 <div class="card">
+  <h1>Hey Faba Fish 💗</h1>
 
-<h1>Hey Faba Fish 💗</h1>
+  <p class="lead">
+    soooo i had to get creative considering i cant really do a in person proposal!! :3
+  </p>
 
-<p>
-soooo i had to get creative considering i cant really do a in person proposal!! :3
-</p>
+  <div class="typedBox">
+    <p id="typed"></p>
+  </div>
 
-<div id="typed"></div>
+  <!-- IMPORTANT: These must match your repo filenames exactly -->
+  <div class="photos">
+    <img src="sillies.jpg" alt="sillies">
+    <img src="thelomi.jpg" alt="thelomi">
+  </div>
 
-<div class="photos">
-<img src="sillies.jpg">
-<img src="thelomi.jpg">
-</div>
+  <h2 style="margin:12px 0 6px;">Will you be my Valentine plsplsplsplspls 😭💘</h2>
 
-<h2>Will you be my Valentine plsplsplsplspls 😭💘</h2>
+  <div class="btnArea" id="btnArea">
+    <button id="yes" type="button">YES 💘</button>
+    <button id="no" type="button">No 🙃</button>
+  </div>
 
-<button id="yes">YES 💘</button>
-<button id="no">No 🙃</button>
+  <div class="toast" id="toast"></div>
+  <div class="result" id="result"></div>
 
-<div id="result"></div>
+  <!-- NEW: Mixtape card -->
+  <div class="mixtape">
+    <div class="mixtapeTop">
+      <div>
+        <div class="tag">MIXTAPE FOR FABA FISH</div>
+        <h3 class="mixtapeTitle">“If I made you a playlist…”</h3>
+        <div class="mixtapeSub">4 songs. 4 reasons. 0 skips allowed 😭</div>
+      </div>
 
-<div class="playlist">
-<h3>Playlist for you:</h3>
-<ul>
-<li>Radio — Bershy</li>
-<li>Without You — Strawberry Guy</li>
-<li>20191009 I Like Her — Mac DeMarco</li>
-<li>In A Good Way — Faye Webster</li>
-</ul>
-</div>
+      <button class="playBtn" id="playToggle" type="button" aria-label="Play or pause the song">▶</button>
+    </div>
 
-<audio id="song">
-<source src="radio.mp3" type="audio/mpeg">
-</audio>
+    <div class="tracks">
+      <div class="track">
+        <div class="tLeft">
+          <div class="num">01</div>
+          <div>
+            <div class="song">Radio <span class="artist">— Bershy</span></div>
+            <div class="why">Because it feels like “us” when it hits.</div>
+          </div>
+        </div>
+        <div class="mood">💗</div>
+      </div>
 
+      <div class="track">
+        <div class="tLeft">
+          <div class="num">02</div>
+          <div>
+            <div class="song">Without You <span class="artist">— Strawberry Guy</span></div>
+            <div class="why">Soft + warm. Like walking you home.</div>
+          </div>
+        </div>
+        <div class="mood">🌙</div>
+      </div>
+
+      <div class="track">
+        <div class="tLeft">
+          <div class="num">03</div>
+          <div>
+            <div class="song">20191009 I Like Her <span class="artist">— Mac DeMarco</span></div>
+            <div class="why">The title says it. I’m not beating the allegations.</div>
+          </div>
+        </div>
+        <div class="mood">😌</div>
+      </div>
+
+      <div class="track">
+        <div class="tLeft">
+          <div class="num">04</div>
+          <div>
+            <div class="song">In A Good Way <span class="artist">— Faye Webster</span></div>
+            <div class="why">Because you changed my confidence… in a good way.</div>
+          </div>
+        </div>
+        <div class="mood">🥹</div>
+      </div>
+    </div>
+
+    <div class="mixtapeFooter">
+      <span>Press YES = song starts 🎧</span>
+      <span>Four Eyes approved ✅</span>
+    </div>
+  </div>
+
+  <div class="tiny">Made with bravery and a tiny bit of chaos.</div>
+
+  <!-- Audio (must exist in repo root as radio.mp3) -->
+  <audio id="song" preload="auto">
+    <source src="radio.mp3" type="audio/mpeg">
+  </audio>
 </div>
 
 <script>
+  // Loading bar + start
+  const overlay = document.getElementById("overlay");
+  const bar = document.getElementById("bar");
+  const startBtn = document.getElementById("startBtn");
 
-const scriptLines = [
-"You make me feel seen and listened to… and I honestly didn’t realize how much I needed that.",
-"",
-"I still replay walking you home after Jamal’s house in my head.",
-"Like… every day. Every time. It was just quietly perfect.",
-"",
-"You're super artsy, super silly, and I love your sweaty palms so much!",
-"and your chubby cheeks when you pout?? I’m cooked.",
-"",
-"I love you with my life Faba, yes even more than Jamal's dummy thicc ass"
-];
+  let load = 0;
+  const loadTimer = setInterval(() => {
+    load = Math.min(load + Math.random() * 14, 100);
+    bar.style.width = load.toFixed(0) + "%";
+    if (load >= 100) clearInterval(loadTimer);
+  }, 120);
 
-function startSite(){
-document.getElementById("overlay").style.display="none";
-typeText();
-}
+  // Typed “movie text”
+  const scriptLines = [
+    "You make me feel seen and listened to… and I honestly didn’t realize how much I needed that.",
+    "",
+    "I still replay walking you home after Jamal’s house in my head",
+    "Like… every day. Every time. It was just quietly perfect.",
+    "",
+    "You're super artsy, super silly, and I love your sweaty palms so much!",
+    "and your chubby cheeks when you pout?? I’m cooked.",
+    "",
+    "I love you with my life Faba, yes even more than Jamal's dummy thicc ass"
+  ];
 
-function typeText(){
-let text=scriptLines.join("\n");
-let i=0;
-const speed=20;
-const el=document.getElementById("typed");
+  function typeText(){
+    const text = scriptLines.join("\n");
+    let i = 0;
+    const el = document.getElementById("typed");
+    const speed = 18;
 
-const timer=setInterval(()=>{
-el.innerText=text.slice(0,i);
-i++;
-if(i>text.length) clearInterval(timer);
-},speed);
-}
+    const timer = setInterval(() => {
+      el.innerText = text.slice(0, i);
+      i++;
+      if (i > text.length) clearInterval(timer);
+    }, speed);
+  }
 
-const no=document.getElementById("no");
-const yes=document.getElementById("yes");
+  startBtn.addEventListener("click", () => {
+    overlay.style.opacity = "0";
+    overlay.style.transition = "opacity .45s ease";
+    setTimeout(() => overlay.remove(), 480);
+    typeText();
+  });
 
-let dodges=0;
+  // Buttons + dodging NO
+  const yes = document.getElementById("yes");
+  const no = document.getElementById("no");
+  const btnArea = document.getElementById("btnArea");
+  const toast = document.getElementById("toast");
+  const result = document.getElementById("result");
 
-function moveNo(){
-dodges++;
-const x=Math.random()*300;
-const y=Math.random()*200;
+  let dodges = 0;
+  const noLines = [
+    "be serious 😭",
+    "not you trying to press NO…",
+    "we don’t get paid tomorrow btw",
+    "Jamal’s dummy thicc ass would never do this to me",
+    "Faba Fish pls 😔",
+    "this is getting embarrassing (for the NO button)",
+    "NO is shy. click YES.",
+    "okay now you’re just playing",
+    "alright… I’m gonna start crying",
+    "fine. NO is deleted."
+  ];
 
-no.style.position="absolute";
-no.style.left=x+"px";
-no.style.top=y+"px";
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.animate(
+      [{opacity:0, transform:"translateY(6px)"},{opacity:1, transform:"translateY(0)"}],
+      {duration:160, easing:"ease-out"}
+    );
+  }
 
-yes.style.transform="scale("+(1+dodges*0.1)+")";
-}
+  function moveNo(){
+    dodges++;
 
-no.addEventListener("mouseover",moveNo);
-no.addEventListener("click",moveNo);
+    const area = btnArea.getBoundingClientRect();
+    const btn = no.getBoundingClientRect();
+    const padding = 6;
 
-yes.addEventListener("click",()=>{
-document.getElementById("result").innerHTML="<h2>YIPPEEE HOORAYYYY YAYYYYYY 🎉💞</h2>";
-document.getElementById("song").play();
-no.style.display="none";
-});
+    const maxX = Math.max(padding, area.width - btn.width - padding);
+    const maxY = Math.max(padding, area.height - btn.height - padding);
 
+    const x = padding + Math.random() * maxX;
+    const y = padding + Math.random() * maxY;
+
+    no.style.position = "absolute";
+    no.style.left = x + "px";
+    no.style.top  = y + "px";
+
+    // YES grows (capped)
+    const scale = Math.min(1 + dodges * 0.12, 2.2);
+    yes.style.transform = `scale(${scale})`;
+
+    showToast(noLines[Math.min(dodges - 1, noLines.length - 1)]);
+    if (dodges >= 10) no.style.display = "none";
+  }
+
+  no.addEventListener("mouseenter", moveNo);
+  no.addEventListener("click", moveNo);
+
+  // Audio
+  const song = document.getElementById("song");
+
+  yes.addEventListener("click", async () => {
+    result.innerHTML = "YIPPEEE HOORAYYYY YAYYYYYY 🎉💞";
+    no.style.display = "none";
+    yes.textContent = "YES ✅";
+    showToast("W. Massive W. 😭💖");
+
+    try{
+      await song.play();
+    }catch(e){
+      showToast("Tap YES again so the song can play 😭");
+    }
+  });
+
+  // Mixtape play/pause button (optional)
+  const playToggle = document.getElementById("playToggle");
+  if (playToggle) {
+    playToggle.addEventListener("click", async () => {
+      try{
+        if (song.paused) {
+          await song.play();
+          playToggle.textContent = "❚❚";
+        } else {
+          song.pause();
+          playToggle.textContent = "▶";
+        }
+      } catch (e) {
+        playToggle.textContent = "▶";
+      }
+    });
+
+    // keep icon synced
+    song.addEventListener("play", () => playToggle.textContent = "❚❚");
+    song.addEventListener("pause", () => playToggle.textContent = "▶");
+    song.addEventListener("ended", () => playToggle.textContent = "▶");
+  }
 </script>
 
 </body>
 </html>
-
