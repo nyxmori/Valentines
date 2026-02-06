@@ -1,463 +1,523 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Faba Fish 💗</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Faba Fish 💗</title>
 
-<style>
-  :root{
-    --pink:#ff2d6f;
-    --soft:#fff0f6;
-    --ink:#1f1f1f;
-  }
+  <style>
+    :root{
+      --pink:#ff2d6f;
+      --pink2:#ff6aa2;
+      --soft:#fff0f6;
+      --ink:#1f1f1f;
+      --card:rgba(255,255,255,.94);
+      --stroke:rgba(255,45,111,.16);
+      --shadow:0 18px 50px rgba(0,0,0,.10);
+    }
 
-  body{
-    margin:0;
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    background: radial-gradient(circle at top, #ffe3ef, #ffffff);
-    display:grid;
-    place-items:center;
-    overflow-x:hidden;
-    color:var(--ink);
-  }
+    *{box-sizing:border-box}
 
-  /* Intro overlay */
-  .overlay{
-    position:fixed;
-    inset:0;
-    background: radial-gradient(circle at 30% 20%, rgba(255,45,111,.18), rgba(0,0,0,.82));
-    display:grid;
-    place-items:center;
-    color:white;
-    z-index:999;
-    padding:24px;
-    text-align:center;
-  }
-  .overlayCard{
-    width:min(720px, 92vw);
-    border:1px solid rgba(255,255,255,0.18);
-    border-radius:24px;
-    padding:22px;
-    background: rgba(255,255,255,0.06);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-  }
-  .progress{
-    height:10px;
-    border-radius:999px;
-    background: rgba(255,255,255,0.12);
-    overflow:hidden;
-    margin:16px 0 18px;
-  }
-  .bar{
-    height:100%;
-    width:0%;
-    border-radius:999px;
-    background: linear-gradient(90deg, rgba(255,45,111,1), rgba(255,210,226,1));
-    transition: width .2s ease;
-  }
-  .startBtn{
-    border:0;
-    background: var(--pink);
-    color:white;
-    padding: 12px 18px;
-    border-radius: 999px;
-    font-size: 1rem;
-    cursor:pointer;
-    box-shadow: 0 14px 28px rgba(255,45,111,.25);
-  }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255,45,111,.10), transparent 55%),
+        radial-gradient(circle at 80% 20%, rgba(255,106,162,.10), transparent 55%),
+        radial-gradient(circle at top, #ffe3ef, #ffffff);
+      display:grid;
+      place-items:center;
+      min-height:100vh;
+      overflow-x:hidden;
+      color:var(--ink);
+    }
 
-  /* Main card */
-  .card{
-    width:min(760px, 92vw);
-    background: rgba(255,255,255,0.94);
-    border: 1px solid rgba(255,45,111,0.16);
-    border-radius: 26px;
-    padding: 26px;
-    box-shadow:0 18px 50px rgba(0,0,0,0.10);
-    text-align:center;
-    position:relative;
-    margin: 36px 0;
-  }
+    /* subtle floating hearts */
+    .bgHearts{ position:fixed; inset:-40px; pointer-events:none; z-index:-1; }
+    .bgHearts span{
+      position:absolute;
+      animation: floatUp linear infinite;
+      opacity:.85;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,.06));
+      user-select:none;
+    }
+    @keyframes floatUp{
+      from{ transform: translateY(120vh) translateX(0) rotate(0deg); }
+      to{ transform: translateY(-25vh) translateX(40px) rotate(360deg); }
+    }
 
-  h1{ margin: 4px 0 8px; font-size: 2rem; }
-  .lead{ margin: 0 0 12px; font-size: 1.05rem; line-height:1.55; opacity:.92; }
+    /* overlay */
+    .overlay{
+      position:fixed; inset:0;
+      display:grid; place-items:center;
+      padding:24px;
+      background: radial-gradient(circle at 30% 20%, rgba(255,45,111,.20), rgba(0,0,0,.82));
+      z-index:999;
+    }
+    .overlayCard{
+      width:min(720px,92vw);
+      border-radius:26px;
+      padding:22px;
+      background: rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.16);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+      color:white;
+      text-align:center;
+    }
+    .overlayCard h2{ margin:0 0 8px; }
+    .overlayCard p{ margin:0 0 14px; opacity:.86; line-height:1.5; }
 
-  /* Cute message reveal (instead of typing) */
-  .notes{
-    width: min(680px, 100%);
-    margin: 14px auto 16px;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    text-align:left;
-  }
-  .note{
-    background: rgba(255,240,246,0.92);
-    border: 1px solid rgba(255,45,111,0.16);
-    border-radius: 18px;
-    padding: 12px 14px;
-    box-shadow: 0 10px 22px rgba(0,0,0,.06);
-    opacity:0;
-    transform: translateY(10px) scale(.985);
-  }
-  .note.show{
-    animation: popIn .42s cubic-bezier(.2,.9,.2,1) forwards;
-  }
-  @keyframes popIn{
-    to{ opacity:1; transform: translateY(0) scale(1); }
-  }
-  .note strong{ color: var(--pink); }
+    .progress{
+      height:10px; border-radius:999px; overflow:hidden;
+      background: rgba(255,255,255,.14);
+      margin:14px 0 18px;
+    }
+    .bar{
+      height:100%; width:0%;
+      border-radius:999px;
+      background: linear-gradient(90deg, var(--pink), #ffd2e2);
+      transition: width .18s ease;
+    }
 
-  /* Photos */
-  .photos{
-    display:flex;
-    gap: 12px;
-    justify-content:center;
-    flex-wrap:wrap;
-    margin: 14px 0 10px;
-  }
-  .photos img{
-    width: 210px;
-    height: 210px;
-    object-fit: cover;
-    border-radius: 22px;
-    border: 1px solid rgba(255,45,111,0.18);
-    box-shadow: 0 14px 26px rgba(0,0,0,.08);
-    user-select:none;
-  }
+    .startBtn{
+      border:0;
+      background: var(--pink);
+      color:white;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-size: 1rem;
+      cursor:pointer;
+      box-shadow: 0 14px 28px rgba(255,45,111,.25);
+    }
 
-  /* Buttons */
-  .btnArea{
-    margin-top: 12px;
-    position:relative;
-    min-height: 74px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap: 12px;
-    flex-wrap:wrap;
-  }
-  button{
-    border:0;
-    padding: 14px 20px;
-    font-size: 1.08rem;
-    border-radius: 999px;
-    cursor:pointer;
-    user-select:none;
-    transition: transform .12s ease, filter .15s ease;
-  }
-  button:active{ transform: scale(.99); }
+    /* main card */
+    .card{
+      width:min(820px, 92vw);
+      background: var(--card);
+      border:1px solid var(--stroke);
+      border-radius: 28px;
+      padding: 26px;
+      box-shadow: var(--shadow);
+      text-align:center;
+      margin: 34px 0;
+      position:relative;
+    }
 
-  #yes{
-    background: var(--pink);
-    color: white;
-    box-shadow: 0 18px 30px rgba(255,45,111,.25);
-  }
-  #yes:hover{ filter: brightness(1.03); }
+    .version{
+      position:absolute;
+      top:16px; right:16px;
+      font-size:.78rem;
+      opacity:.55;
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(255,240,246,.85);
+      border:1px solid rgba(255,45,111,.10);
+    }
 
-  #no{
-    background: #f2f2f2;
-    color:#111;
-    border: 1px solid rgba(0,0,0,.06);
-  }
+    h1{ margin: 6px 0 6px; font-size: 2.05rem; }
+    .lead{ margin:0 0 14px; opacity:.92; font-size:1.05rem; }
 
-  .toast{
-    min-height: 26px;
-    margin-top: 10px;
-    font-weight: 900;
-    color: var(--pink);
-  }
+    /* love notes (cute pop-in) */
+    .notes{
+      width:min(700px, 100%);
+      margin: 10px auto 16px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      text-align:left;
+    }
+    .note{
+      background: rgba(255,240,246,.92);
+      border:1px solid rgba(255,45,111,.16);
+      border-radius: 18px;
+      padding: 12px 14px;
+      box-shadow: 0 12px 24px rgba(0,0,0,.06);
+      opacity:0;
+      transform: translateY(10px) scale(.985);
+      position:relative;
+      overflow:hidden;
+    }
+    .note::before{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(circle at 10% 10%, rgba(255,45,111,.10), transparent 55%);
+      pointer-events:none;
+    }
+    .note.show{
+      animation: popIn .48s cubic-bezier(.2,.95,.2,1) forwards;
+    }
+    @keyframes popIn{
+      to{ opacity:1; transform: translateY(0) scale(1); }
+    }
+    .note strong{ color: var(--pink); }
+    .spark{
+      display:inline-block;
+      margin-left:6px;
+      animation: sparkle 1.6s ease-in-out infinite;
+    }
+    @keyframes sparkle{
+      0%,100%{ transform: translateY(0); opacity:.8; }
+      50%{ transform: translateY(-2px); opacity:1; }
+    }
 
-  .result{
-    margin-top: 14px;
-    font-size: 1.35rem;
-    font-weight: 1000;
-  }
+    /* photos */
+    .photos{
+      display:flex; justify-content:center; flex-wrap:wrap;
+      gap: 12px; margin: 12px 0 12px;
+    }
+    .photos img{
+      width: 220px; height: 220px;
+      object-fit: cover;
+      border-radius: 22px;
+      border:1px solid rgba(255,45,111,.18);
+      box-shadow: 0 16px 28px rgba(0,0,0,.08);
+      user-select:none;
+      background:white;
+    }
 
-  /* Cuter replacement for playlist */
-  .cuteBox{
-    margin: 18px auto 0;
-    width: min(680px, 100%);
-    text-align:left;
-    padding: 16px;
-    border-radius: 22px;
-    border: 1px solid rgba(255,45,111,0.16);
-    background: rgba(255,255,255,0.92);
-    box-shadow: 0 10px 24px rgba(0,0,0,0.07);
-  }
-  .cuteTop{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:12px;
-  }
-  .cuteTag{
-    display:inline-block;
-    font-size:.78rem;
-    letter-spacing:.12em;
-    text-transform:uppercase;
-    color: var(--pink);
-    opacity:.9;
-    margin-bottom:6px;
-  }
-  .cuteTitle{
-    margin:0;
-    font-size:1.15rem;
-  }
-  .cuteSub{
-    margin-top:4px;
-    font-size:.95rem;
-    opacity:.82;
-    line-height:1.45;
-  }
+    /* buttons */
+    .btnArea{
+      margin-top: 10px;
+      position:relative;
+      min-height: 78px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 12px;
+      flex-wrap:wrap;
+    }
+    button{
+      border:0;
+      padding: 14px 20px;
+      font-size: 1.08rem;
+      border-radius: 999px;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .12s ease, filter .15s ease, box-shadow .18s ease;
+    }
+    button:active{ transform: scale(.99); }
 
-  .tokens{
-    margin-top:12px;
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-  }
-  .token{
-    background: rgba(255,240,246,0.85);
-    border: 1px solid rgba(255,45,111,0.12);
-    padding: 10px 12px;
-    border-radius: 18px;
-    font-weight: 800;
-    display:flex;
-    align-items:center;
-    gap:8px;
-  }
-  .token span{ font-weight: 900; color: var(--pink); }
+    #yes{
+      background: var(--pink);
+      color:white;
+      box-shadow: 0 18px 30px rgba(255,45,111,.25);
+    }
+    #yes:hover{ filter: brightness(1.03); }
 
-  .tiny{
-    margin-top: 14px;
-    font-size: .9rem;
-    opacity:.72;
-  }
+    #no{
+      background:#f2f2f2;
+      border:1px solid rgba(0,0,0,.06);
+    }
 
-  /* Fun cinematic dim on YES */
-  .cinema{
-    position:fixed;
-    inset:0;
-    background: rgba(0,0,0,0);
-    pointer-events:none;
-    z-index: 200;
-    transition: background 1.1s ease;
-  }
-  .cinema.on{ background: rgba(0,0,0,0.38); }
-</style>
+    .toast{
+      min-height: 24px;
+      margin-top: 10px;
+      font-weight: 900;
+      color: var(--pink);
+    }
+    .result{
+      margin-top: 12px;
+      font-size: 1.35rem;
+      font-weight: 1000;
+    }
+
+    /* Faba appreciation section (cute) */
+    .appreciation{
+      width:min(700px, 100%);
+      margin: 18px auto 0;
+      text-align:left;
+      padding: 16px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,45,111,0.16);
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.07);
+    }
+    .appTop{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+    }
+    .badge{
+      display:inline-block;
+      font-size:.78rem;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: var(--pink);
+      opacity:.9;
+      margin-bottom:6px;
+    }
+    .appTitle{ margin:0; font-size:1.15rem; }
+    .appSub{ margin-top:4px; opacity:.82; line-height:1.45; }
+
+    .chips{
+      margin-top:12px;
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .chip{
+      background: rgba(255,240,246,0.85);
+      border: 1px solid rgba(255,45,111,0.12);
+      padding: 10px 12px;
+      border-radius: 18px;
+      font-weight: 850;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .chip b{ color: var(--pink); }
+
+    .tiny{
+      margin-top: 14px;
+      font-size:.9rem;
+      opacity:.72;
+    }
+
+    /* cinematic dim on YES */
+    .cinema{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,0);
+      pointer-events:none;
+      z-index: 200;
+      transition: background 1.1s ease;
+    }
+    .cinema.on{ background: rgba(0,0,0,0.40); }
+  </style>
 </head>
 
 <body>
-<div class="cinema" id="cinema"></div>
+  <div class="bgHearts" id="bgHearts"></div>
+  <div class="cinema" id="cinema"></div>
 
-<!-- Intro overlay -->
-<div class="overlay" id="overlay">
-  <div class="overlayCard">
-    <h2 style="margin:0 0 6px;">Loading something special for Faba Fish 💗</h2>
-    <div style="opacity:.85; line-height:1.5;">
-      Not a scam. Not a virus. Just me being extra.<br>
-      Press start when you’re ready 😭
+  <div class="overlay" id="overlay">
+    <div class="overlayCard">
+      <h2>Loading something special for Faba Fish 💗</h2>
+      <p>Not a scam. Not a virus. Just me being extra.<br>Press start when you’re ready 😭</p>
+      <div class="progress"><div class="bar" id="bar"></div></div>
+      <button class="startBtn" id="startBtn" type="button">Start</button>
     </div>
-    <div class="progress"><div class="bar" id="bar"></div></div>
-    <button class="startBtn" id="startBtn" type="button">Start</button>
-  </div>
-</div>
-
-<div class="card">
-  <h1>Hey Faba Fish 💗</h1>
-
-  <p class="lead">
-    soooo i had to get creative considering i cant really do a in person proposal!! :3
-  </p>
-
-  <!-- Cute note reveals -->
-  <div class="notes" id="notes">
-    <!-- filled by JS -->
   </div>
 
-  <div class="photos">
-    <img src="sillies.jpg" alt="sillies">
-    <img src="theloml.jpg" alt="theloml">
-  </div>
+  <div class="card">
+    <div class="version">NEW VERSION ✅</div>
 
-  <h2 style="margin:12px 0 6px;">Will you be my Valentine plsplsplsplspls 😭💘</h2>
+    <h1>Hey Faba Fish 💗</h1>
+    <p class="lead">soooo i had to get creative considering i cant really do a in person proposal!! :3</p>
 
-  <div class="btnArea" id="btnArea">
-    <button id="yes" type="button">YES 💘</button>
-    <button id="no" type="button">No 🙃</button>
-  </div>
+    <div class="notes" id="notes"></div>
 
-  <div class="toast" id="toast"></div>
-  <div class="result" id="result"></div>
+    <div class="photos">
+      <!-- MUST match repo filenames exactly -->
+      <img src="sillies.jpg" alt="sillies">
+      <img src="theloml.jpg" alt="theloml">
+    </div>
 
-  <!-- Replaced playlist -->
-  <div class="cuteBox">
-    <div class="cuteTop">
-      <div>
-        <div class="cuteTag">OFFICIAL FABA FISH APPRECIATION ZONE</div>
-        <h3 class="cuteTitle">Things I’m obsessed with (respectfully)</h3>
-        <div class="cuteSub">
-          This is not a list. This is evidence. Also yes, Four Eyes wrote this.
+    <h2 style="margin:12px 0 6px;">Will you be my Valentine plsplsplsplspls 😭💘</h2>
+
+    <div class="btnArea" id="btnArea">
+      <button id="yes" type="button">YES 💘</button>
+      <button id="no" type="button">No 🙃</button>
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <div class="result" id="result"></div>
+
+    <div class="appreciation">
+      <div class="appTop">
+        <div>
+          <div class="badge">OFFICIAL FABA FISH APPRECIATION SECTION</div>
+          <h3 class="appTitle">Things I’m obsessed with (respectfully)</h3>
+          <div class="appSub">
+            This is not a list. This is <strong>evidence</strong>. Also yes, Four Eyes wrote this. <span class="spark">✨</span>
+          </div>
         </div>
+        <div style="font-size:1.4rem;">💗</div>
       </div>
-      <div style="font-size:1.4rem;">💗</div>
+
+      <div class="chips">
+        <div class="chip"><b>✓</b> your <strong>super artsy</strong> brain</div>
+        <div class="chip"><b>✓</b> your <strong>super silly</strong> energy</div>
+        <div class="chip"><b>✓</b> your <strong>sweaty palms</strong> (I LOVE THEM)</div>
+        <div class="chip"><b>✓</b> your <strong>chubby cheek pout</strong> 😭</div>
+        <div class="chip"><b>✓</b> the way you make me feel <strong>seen</strong></div>
+      </div>
     </div>
 
-    <div class="tokens">
-      <div class="token"><span>✓</span> your <strong>super artsy</strong> brain</div>
-      <div class="token"><span>✓</span> your <strong>super silly</strong> energy</div>
-      <div class="token"><span>✓</span> your <strong>sweaty palms</strong> (I LOVE THEM)</div>
-      <div class="token"><span>✓</span> your <strong>chubby cheek pout</strong> 😭</div>
-      <div class="token"><span>✓</span> the way you make me feel <strong>seen</strong></div>
-    </div>
+    <div class="tiny">Made with bravery and a tiny bit of chaos.</div>
+
+    <!-- ONLY audio file; plays only on YES -->
+    <audio id="song" preload="auto">
+      <source src="radio.mp3" type="audio/mpeg">
+    </audio>
   </div>
 
-  <div class="tiny">Made with bravery and a tiny bit of chaos.</div>
-
-  <!-- ONLY audio file we use -->
-  <audio id="song" preload="auto">
-    <source src="radio.mp3" type="audio/mpeg">
-  </audio>
-</div>
-
-<script>
-  // Loading bar + start
-  const overlay = document.getElementById("overlay");
-  const bar = document.getElementById("bar");
-  const startBtn = document.getElementById("startBtn");
-
-  let load = 0;
-  const loadTimer = setInterval(() => {
-    load = Math.min(load + Math.random() * 14, 100);
-    bar.style.width = load.toFixed(0) + "%";
-    if (load >= 100) clearInterval(loadTimer);
-  }, 120);
-
-  // Cute “note reveal” lines (replaces typing)
-  const noteLines = [
-    "You make me feel <strong>seen</strong> and listened to… and I honestly didn’t realize how much I needed that.",
-    "I still replay walking you home after Jamal’s house in my head.",
-    "<strong>Like… every day.</strong> Every time. It was just quietly perfect.",
-    "You're super artsy, super silly, and I love your sweaty palms so much!",
-    "and your chubby cheeks when you pout?? I’m cooked.",
-    "I love you with my life Faba, yes even more than Jamal's dummy thicc ass"
-  ];
-
-  const notesEl = document.getElementById("notes");
-
-  function revealNotes(){
-    notesEl.innerHTML = "";
-    noteLines.forEach((line, idx) => {
-      const div = document.createElement("div");
-      div.className = "note";
-      div.innerHTML = line;
-      notesEl.appendChild(div);
-
-      setTimeout(() => {
-        div.classList.add("show");
-      }, 180 + idx * 260);
-    });
-  }
-
-  startBtn.addEventListener("click", () => {
-    overlay.style.opacity = "0";
-    overlay.style.transition = "opacity .45s ease";
-    setTimeout(() => overlay.remove(), 480);
-    revealNotes();
-  });
-
-  // Buttons + dodging NO
-  const yes = document.getElementById("yes");
-  const no = document.getElementById("no");
-  const btnArea = document.getElementById("btnArea");
-  const toast = document.getElementById("toast");
-  const result = document.getElementById("result");
-  const cinema = document.getElementById("cinema");
-
-  let dodges = 0;
-  const noLines = [
-    "be serious 😭",
-    "not you trying to press NO…",
-    "we don’t get paid tomorrow btw",
-    "Jamal’s dummy thicc ass would never do this to me",
-    "Faba Fish pls 😔",
-    "this is getting embarrassing (for the NO button)",
-    "NO is shy. click YES.",
-    "okay now you’re just playing",
-    "alright… I’m gonna start crying",
-    "fine. NO is deleted."
-  ];
-
-  function showToast(msg){
-    toast.textContent = msg;
-    toast.animate(
-      [{opacity:0, transform:"translateY(6px)"},{opacity:1, transform:"translateY(0)"}],
-      {duration:160, easing:"ease-out"}
-    );
-  }
-
-  function moveNo(){
-    dodges++;
-
-    const area = btnArea.getBoundingClientRect();
-    const btn = no.getBoundingClientRect();
-    const padding = 6;
-
-    const maxX = Math.max(padding, area.width - btn.width - padding);
-    const maxY = Math.max(padding, area.height - btn.height - padding);
-
-    const x = padding + Math.random() * maxX;
-    const y = padding + Math.random() * maxY;
-
-    no.style.position = "absolute";
-    no.style.left = x + "px";
-    no.style.top  = y + "px";
-
-    // YES grows (capped)
-    const scale = Math.min(1 + dodges * 0.12, 2.2);
-    yes.style.transform = `scale(${scale})`;
-
-    showToast(noLines[Math.min(dodges - 1, noLines.length - 1)]);
-    if (dodges >= 10) no.style.display = "none";
-  }
-
-  no.addEventListener("mouseenter", moveNo);
-  no.addEventListener("click", moveNo);
-
-  // Audio: ONLY plays radio.mp3 on YES click
-  const song = document.getElementById("song");
-
-  function fadeInAudio(audio, seconds=2.0){
-    audio.volume = 0;
-    const steps = 30;
-    const intervalMs = (seconds * 1000) / steps;
-    let step = 0;
-    const t = setInterval(() => {
-      step++;
-      audio.volume = Math.min(step / steps, 1);
-      if (step >= steps) clearInterval(t);
-    }, intervalMs);
-  }
-
-  yes.addEventListener("click", async () => {
-    cinema.classList.add("on");
-
-    result.innerHTML = "YIPPEEE HOORAYYYY YAYYYYYY 🎉💞";
-    no.style.display = "none";
-    yes.textContent = "YES ✅";
-    showToast("W. Massive W. 😭💖");
-
-    try{
-      await song.play();
-      fadeInAudio(song, 2.2);
-    }catch(e){
-      showToast("Tap YES again so the song can play 😭");
+  <script>
+    // Floating background hearts
+    const bg = document.getElementById("bgHearts");
+    const emojis = ["💗","💖","💞","💘","💕","❤️"];
+    for(let i=0;i<26;i++){
+      const s=document.createElement("span");
+      s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+      s.style.left = Math.random()*100 + "%";
+      s.style.animationDuration = (6 + Math.random()*7) + "s";
+      s.style.animationDelay = (-Math.random()*8) + "s";
+      s.style.fontSize = (14 + Math.random()*22) + "px";
+      bg.appendChild(s);
     }
-  });
-</script>
 
+    // Loading bar
+    const overlay = document.getElementById("overlay");
+    const bar = document.getElementById("bar");
+    const startBtn = document.getElementById("startBtn");
+
+    let load = 0;
+    const loadTimer = setInterval(() => {
+      load = Math.min(load + Math.random()*14, 100);
+      bar.style.width = load.toFixed(0) + "%";
+      if(load >= 100) clearInterval(loadTimer);
+    }, 120);
+
+    // Cute notes (pop-in)
+    const noteLines = [
+      "You make me feel <strong>seen</strong> and listened to… and I honestly didn’t realize how much I needed that.",
+      "I still replay walking you home after Jamal’s house in my head.",
+      "<strong>Like… every day.</strong> Every time. It was just quietly perfect.",
+      "You're super artsy, super silly, and I love your sweaty palms so much!",
+      "and your chubby cheeks when you pout?? I’m cooked.",
+      "I love you with my life Faba, yes even more than Jamal's dummy thicc ass"
+    ];
+    const notesEl = document.getElementById("notes");
+
+    function revealNotes(){
+      notesEl.innerHTML = "";
+      noteLines.forEach((line, idx) => {
+        const div = document.createElement("div");
+        div.className = "note";
+        div.innerHTML = line;
+        notesEl.appendChild(div);
+        setTimeout(()=>div.classList.add("show"), 180 + idx*280);
+      });
+    }
+
+    startBtn.addEventListener("click", () => {
+      overlay.style.opacity="0";
+      overlay.style.transition="opacity .45s ease";
+      setTimeout(()=>overlay.remove(), 480);
+      revealNotes();
+    });
+
+    // Buttons
+    const yes = document.getElementById("yes");
+    const no  = document.getElementById("no");
+    const btnArea = document.getElementById("btnArea");
+    const toast = document.getElementById("toast");
+    const result = document.getElementById("result");
+    const cinema = document.getElementById("cinema");
+
+    let dodges = 0;
+    const noLines = [
+      "be serious 😭",
+      "not you trying to press NO…",
+      "we don’t get paid tomorrow btw",
+      "Jamal’s dummy thicc ass would never do this to me",
+      "Faba Fish pls 😔",
+      "this is getting embarrassing (for the NO button)",
+      "NO is shy. click YES.",
+      "okay now you’re just playing",
+      "alright… I’m gonna start crying",
+      "fine. NO is deleted."
+    ];
+
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.animate(
+        [{opacity:0, transform:"translateY(6px)"},{opacity:1, transform:"translateY(0)"}],
+        {duration:160, easing:"ease-out"}
+      );
+    }
+
+    function moveNo(){
+      dodges++;
+      const area = btnArea.getBoundingClientRect();
+      const btn  = no.getBoundingClientRect();
+      const pad = 6;
+
+      const maxX = Math.max(pad, area.width - btn.width - pad);
+      const maxY = Math.max(pad, area.height - btn.height - pad);
+
+      const x = pad + Math.random()*maxX;
+      const y = pad + Math.random()*maxY;
+
+      no.style.position="absolute";
+      no.style.left = x + "px";
+      no.style.top  = y + "px";
+
+      const scale = Math.min(1 + dodges*0.12, 2.2);
+      yes.style.transform = `scale(${scale})`;
+
+      showToast(noLines[Math.min(dodges-1, noLines.length-1)]);
+      if(dodges >= 10) no.style.display="none";
+    }
+
+    no.addEventListener("mouseenter", moveNo);
+    no.addEventListener("click", moveNo);
+
+    // Audio: ONLY plays radio.mp3 on YES
+    const song = document.getElementById("song");
+
+    function fadeInAudio(audio, seconds=2.2){
+      audio.volume = 0;
+      const steps = 30;
+      const intervalMs = (seconds*1000)/steps;
+      let step = 0;
+      const t = setInterval(()=>{
+        step++;
+        audio.volume = Math.min(step/steps, 1);
+        if(step>=steps) clearInterval(t);
+      }, intervalMs);
+    }
+
+    // little heart burst on YES (pazazz)
+    function heartBurst(){
+      for(let i=0;i<60;i++){
+        const p=document.createElement("div");
+        p.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        p.style.position="fixed";
+        p.style.left=(window.innerWidth/2)+"px";
+        p.style.top =(window.innerHeight/2)+"px";
+        p.style.zIndex=1000;
+        p.style.fontSize=(16+Math.random()*16)+"px";
+        p.style.opacity="1";
+
+        const dx=(Math.random()-0.5)*800;
+        const dy=(Math.random()-0.7)*800;
+        const rot=(Math.random()*720)+"deg";
+
+        p.animate(
+          [
+            {transform:"translate(0,0) rotate(0deg)", opacity:1},
+            {transform:`translate(${dx}px, ${dy}px) rotate(${rot})`, opacity:0}
+          ],
+          {duration:900+Math.random()*450, easing:"cubic-bezier(.2,.8,.2,1)"}
+        );
+
+        document.body.appendChild(p);
+        setTimeout(()=>p.remove(), 1500);
+      }
+    }
+
+    yes.addEventListener("click", async () => {
+      cinema.classList.add("on");
+      result.innerHTML = "YIPPEEE HOORAYYYY YAYYYYYY 🎉💞";
+      no.style.display="none";
+      yes.textContent="YES ✅";
+      showToast("W. Massive W. 😭💖");
+      heartBurst();
+
+      try{
+        await song.play();
+        fadeInAudio(song, 2.2);
+      }catch(e){
+        showToast("Tap YES again so the song can play 😭");
+      }
+    });
+  </script>
 </body>
 </html>
