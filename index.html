@@ -1,261 +1,189 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>💌 Valentine?</title>
-  <style>
-    :root { font-family: system-ui, Arial, sans-serif; }
-    body{
-      margin:0; min-height:100vh; display:grid; place-items:center;
-      background: radial-gradient(circle at top, #ffe3ec, #fff);
-      overflow:hidden;
-    }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Faba Fish 💗</title>
 
-    .card{
-      width:min(560px, 92vw);
-      background:rgba(255,255,255,0.92);
-      border:1px solid rgba(255,0,90,0.15);
-      border-radius:24px;
-      padding:26px;
-      box-shadow:0 12px 34px rgba(0,0,0,0.10);
-      text-align:center;
-      position:relative;
-    }
+<style>
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background: radial-gradient(circle at top, #ffe3ef, #ffffff);
+display:grid;
+place-items:center;
+overflow:hidden;
+}
 
-    h1{ margin:0 0 8px; font-size:2rem; }
-    p{ margin:0 0 14px; font-size:1.05rem; line-height:1.5; color:#2b2b2b; }
+.card{
+width:80%;
+max-width:700px;
+background:white;
+padding:30px;
+border-radius:25px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+text-align:center;
+position:relative;
+}
 
-    .photos{
-      display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
-      margin:14px 0 16px;
-    }
-    .photos img{
-      width:170px; height:170px; object-fit:cover;
-      border-radius:18px;
-      border:1px solid rgba(255,0,90,0.15);
-      box-shadow:0 10px 20px rgba(0,0,0,0.08);
-      user-select:none;
-    }
+.photos img{
+width:200px;
+height:200px;
+object-fit:cover;
+border-radius:20px;
+margin:10px;
+}
 
-    .btns{
-      display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
-      margin-top:10px;
-      position:relative;
-      min-height:58px;
-    }
+button{
+padding:15px 25px;
+font-size:18px;
+border:none;
+border-radius:999px;
+cursor:pointer;
+}
 
-    button{
-      border:0; padding:12px 18px; border-radius:999px;
-      font-size:1rem; cursor:pointer;
-      transition: transform .08s ease, filter .15s ease;
-      user-select:none;
-    }
-    button:active{ transform: scale(0.98); }
+#yes{
+background:#ff2d6f;
+color:white;
+transition:0.2s;
+}
 
-    #yes{
-      background:#ff2d6f; color:white;
-      box-shadow:0 10px 18px rgba(255,45,111,0.25);
-    }
-    #yes:hover{ filter:brightness(1.03); }
+#no{
+background:#eee;
+position:relative;
+}
 
-    #no{
-      background:#f2f2f2; color:#111;
-      border:1px solid rgba(0,0,0,0.06);
-    }
+.playlist{
+margin-top:20px;
+text-align:left;
+}
 
-    .tiny{ font-size:.9rem; opacity:.78; margin-top:10px; }
+.overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.8);
+display:grid;
+place-items:center;
+color:white;
+z-index:999;
+text-align:center;
+}
 
-    .toast{
-      margin-top:12px;
-      min-height:22px;
-      font-size:1rem;
-      color:#ff2d6f;
-      font-weight:650;
-    }
+.cursor{
+animation:blink 1s infinite;
+}
+@keyframes blink{50%{opacity:0}}
 
-    .success{
-      display:none;
-      margin-top:18px;
-      padding:14px 16px;
-      border-radius:18px;
-      background:#fff0f5;
-      border:1px solid rgba(255,0,90,0.18);
-    }
-    .success strong{ color:#ff2d6f; }
-
-    .hearts{
-      position:absolute; inset:-60px; pointer-events:none; z-index:-1;
-    }
-    .heart{
-      position:absolute;
-      animation: floatUp linear infinite;
-      opacity:0.85;
-    }
-    @keyframes floatUp{
-      from{ transform: translateY(120vh) translateX(0) rotate(0deg); }
-      to  { transform: translateY(-20vh) translateX(40px) rotate(360deg); }
-    }
-  </style>
+</style>
 </head>
+
 <body>
-  <div class="card">
-    <h1>Hey <span id="herName">Faba Fish</span> 💗</h1>
-    <p>
-      I was gonna just text this… but I decided to be **extra**.
-      <br><br>
-      Will you be my Valentine?
-    </p>
 
-    <!-- ✅ ADD YOUR PICTURES HERE (see instructions below) -->
-    <div class="photos">
-      <img src="sillies.jpg" alt="pic 1">
-      <img src="theloml.jpg" alt="pic 2">
-    </div>
+<div class="overlay" id="overlay">
+<div>
+<h2>Loading something special for Faba Fish 💗</h2>
+<button onclick="startSite()">Start</button>
+</div>
+</div>
 
-    <div class="btns" id="btnArea">
-      <button id="yes">YES 💘</button>
-      <button id="no">No 🙃</button>
-    </div>
+<div class="card">
 
-    <div class="toast" id="toast"></div>
+<h1>Hey Faba Fish 💗</h1>
 
-    <div class="success" id="success">
-      <p><strong>OKAYYYYY</strong> 😭💞</p>
-      <p id="followup">Text me “YES” so I know it’s real 😌</p>
-      <p class="tiny">I will be insufferable about this (respectfully).</p>
-    </div>
+<p>
+soooo i had to get creative considering i cant really do a in person proposal!! :3
+</p>
 
-    <p class="tiny">Made with bravery and a tiny bit of chaos.</p>
-    <div class="hearts" id="hearts"></div>
-  </div>
+<div id="typed"></div>
 
-  <script>
-    // ===== QUICK CUSTOMIZE =====
-    const HER_NAME = "Faba Fish";          // change name here
-    // const FOLLOWUP_TEXT = "Now pick a day this week 😈"; // optional
-    // ===========================
+<div class="photos">
+<img src="sillies.jpg">
+<img src="thelomi.jpg">
+</div>
 
-    document.getElementById("herName").textContent = HER_NAME;
-    // document.getElementById("followup").textContent = FOLLOWUP_TEXT;
+<h2>Will you be my Valentine plsplsplsplspls 😭💘</h2>
 
-    // Floating hearts background
-    const hearts = document.getElementById("hearts");
-    const emojis = ["💗","💖","💞","💘","💕","❤️"];
-    for (let i = 0; i < 26; i++) {
-      const h = document.createElement("div");
-      h.className = "heart";
-      h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-      h.style.left = Math.random() * 100 + "%";
-      h.style.animationDuration = (6 + Math.random() * 7) + "s";
-      h.style.animationDelay = (-Math.random() * 8) + "s";
-      h.style.fontSize = (14 + Math.random() * 22) + "px";
-      hearts.appendChild(h);
-    }
+<button id="yes">YES 💘</button>
+<button id="no">No 🙃</button>
 
-    const yes = document.getElementById("yes");
-    const no = document.getElementById("no");
-    const btnArea = document.getElementById("btnArea");
-    const toast = document.getElementById("toast");
-    const success = document.getElementById("success");
+<div id="result"></div>
 
-    let dodges = 0;
+<div class="playlist">
+<h3>Playlist for you:</h3>
+<ul>
+<li>Radio — Bershy</li>
+<li>Without You — Strawberry Guy</li>
+<li>20191009 I Like Her — Mac DeMarco</li>
+<li>In A Good Way — Faye Webster</li>
+</ul>
+</div>
 
-    const roasts = [
-      "Be serious 😭",
-      "Not you trying to press NO…",
-      "That’s crazy… anyway click YES 💘",
-      "My lawyer says you have to click YES (jk)",
-      "NO is currently out of stock.",
-      "You’re really gonna do me like that??",
-      "This is getting embarrassing (for the NO button).",
-      "The NO button is shy.",
-      "Plot twist: you meant YES.",
-      "I’m crying. Stop."
-    ];
+<audio id="song">
+<source src="radio.mp3" type="audio/mpeg">
+</audio>
 
-    function showToast(msg){
-      toast.textContent = msg;
-      toast.animate([{opacity:0, transform:"translateY(6px)"},{opacity:1, transform:"translateY(0)"}],
-                   {duration:160, easing:"ease-out"});
-    }
+</div>
 
-    // Make NO button dodge inside the button area
-    function moveNoButton(){
-      dodges++;
+<script>
 
-      const area = btnArea.getBoundingClientRect();
-      const btn = no.getBoundingClientRect();
+const scriptLines = [
+"You make me feel seen and listened to… and I honestly didn’t realize how much I needed that.",
+"",
+"I still replay walking you home after Jamal’s house in my head.",
+"Like… every day. Every time. It was just quietly perfect.",
+"",
+"You're super artsy, super silly, and I love your sweaty palms so much!",
+"and your chubby cheeks when you pout?? I’m cooked.",
+"",
+"I love you with my life Faba, yes even more than Jamal's dummy thicc ass"
+];
 
-      // keep it inside the button area
-      const padding = 6;
-      const maxX = Math.max(padding, area.width - btn.width - padding);
-      const maxY = Math.max(padding, area.height - btn.height - padding);
+function startSite(){
+document.getElementById("overlay").style.display="none";
+typeText();
+}
 
-      const x = padding + Math.random() * maxX;
-      const y = padding + Math.random() * maxY;
+function typeText(){
+let text=scriptLines.join("\n");
+let i=0;
+const speed=20;
+const el=document.getElementById("typed");
 
-      no.style.position = "absolute";
-      no.style.left = x + "px";
-      no.style.top  = y + "px";
+const timer=setInterval(()=>{
+el.innerText=text.slice(0,i);
+i++;
+if(i>text.length) clearInterval(timer);
+},speed);
+}
 
-      // YES gets bigger each dodge (but capped so it doesn't explode)
-      const scale = Math.min(1 + dodges * 0.12, 2.2);
-      yes.style.transform = `scale(${scale})`;
+const no=document.getElementById("no");
+const yes=document.getElementById("yes");
 
-      showToast(roasts[(dodges - 1) % roasts.length]);
+let dodges=0;
 
-      // after many dodges, just surrender and remove NO
-      if (dodges >= 10) {
-        no.textContent = "I give up 😭";
-        setTimeout(() => {
-          no.style.display = "none";
-          showToast("Okay fine… YES it is 😌💞");
-        }, 700);
-      }
-    }
+function moveNo(){
+dodges++;
+const x=Math.random()*300;
+const y=Math.random()*200;
 
-    no.addEventListener("mouseenter", moveNoButton);
-    no.addEventListener("click", moveNoButton);
+no.style.position="absolute";
+no.style.left=x+"px";
+no.style.top=y+"px";
 
-    yes.addEventListener("click", () => {
-      success.style.display = "block";
-      no.style.display = "none";
-      yes.textContent = "YES ✅";
-      showToast("W. Massive W. 😭💖");
-      confettiBurst();
-    });
+yes.style.transform="scale("+(1+dodges*0.1)+")";
+}
 
-    // Tiny confetti (no libraries)
-    function confettiBurst(){
-      for (let i = 0; i < 90; i++){
-        const p = document.createElement("div");
-        p.style.position = "fixed";
-        p.style.left = (window.innerWidth/2) + "px";
-        p.style.top  = (window.innerHeight/2) + "px";
-        p.style.width = "8px";
-        p.style.height = "8px";
-        p.style.background = `hsl(${Math.random()*360}, 90%, 70%)`;
-        p.style.borderRadius = "2px";
-        p.style.zIndex = 9999;
+no.addEventListener("mouseover",moveNo);
+no.addEventListener("click",moveNo);
 
-        const dx = (Math.random() - 0.5) * 760;
-        const dy = (Math.random() - 0.7) * 760;
-        const rot = (Math.random()*720) + "deg";
+yes.addEventListener("click",()=>{
+document.getElementById("result").innerHTML="<h2>YIPPEEE HOORAYYYY YAYYYYYY 🎉💞</h2>";
+document.getElementById("song").play();
+no.style.display="none";
+});
 
-        p.animate(
-          [
-            { transform:"translate(0,0) rotate(0deg)", opacity:1 },
-            { transform:`translate(${dx}px, ${dy}px) rotate(${rot})`, opacity:0 }
-          ],
-          { duration: 950 + Math.random()*450, easing:"cubic-bezier(.2,.8,.2,1)" }
-        );
+</script>
 
-        document.body.appendChild(p);
-        setTimeout(() => p.remove(), 1500);
-      }
-    }
-  </script>
 </body>
 </html>
 
